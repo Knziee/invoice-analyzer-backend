@@ -1,0 +1,16 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Banco de dados
+*.db
+
+# IDEs
+.vscode/
+
+# Variaveis de ambiente
+.env
+
+# Arquivo de teste
+teste.csv
