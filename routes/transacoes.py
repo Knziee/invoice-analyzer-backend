@@ -6,6 +6,7 @@ from models import session, Usuario, Transacao
 import pandas as pd
 from datetime import datetime
 from dotenv import load_dotenv
+from utils.categorias import categorizar
 
 transacoes_bp = Blueprint('transacoes', __name__)
 
@@ -61,7 +62,12 @@ def upload_csv(current_user):
             data = datetime.strptime(str(row['data']), '%Y-%m-%d')
             descricao = str(row['descricao'])
             valor = float(row['valor'])
-            categoria = str(row['categoria']) if 'categoria' in row and pd.notna(row['categoria']) else None
+            
+            categoria = None
+            if 'categoria' in row and pd.notna(row['categoria']):
+                categoria = str(row['categoria'])
+            else:
+                categoria = categorizar(descricao)
 
             transacao = Transacao(
                 data=data,
