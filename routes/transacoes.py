@@ -5,6 +5,7 @@ from functools import wraps
 from models import session, Usuario, Transacao
 import pandas as pd
 from datetime import datetime
+from sqlalchemy import and_, func
 from dotenv import load_dotenv
 from utils.categorias import categorizar
 
@@ -93,14 +94,78 @@ def upload_csv(current_user):
 @transacoes_bp.route('/transacoes', methods=['GET'])
 @token_required
 def listar_transacoes(current_user):
-    transacoes = session.query(Transacao).filter_by(user_id=current_user.id).all()
+    query = session.query(Transacao).filter_by(user_id=current_user.id)
+
+    categoria = request.args.get('categoria')  
+    data_inicio = request.args.get('data_inicio')  # YYYY-MM-DD
+    data_fim = request.args.get('data_fim')        # YYYY-MM-DD
+    valor_min = request.args.get('valor_min')
+    valor_max = request.args.get('valor_max')
+
+    filtros = []
+
+    if categoria:
+        categorias = [c.strip().lower() for c in categoria.split(",") if c.strip()]
+        if categorias:
+            filtros.append(func.lower(Transacao.categoria).in_(categorias))
+
+
+    if data_inicio:
+        try:
+            dt_inicio = datetime.strptime(data_inicio, '%Y-%m-%d')
+            filtros.append(Transacao.data >= dt_inicio)
+        except ValueError:
+            return jsonify({"error": "Formato de data_inicio inválido, use YYYY-MM-DD"}), 400
+
+    if data_fim:
+        try:
+            dt_fim = datetime.strptime(data_fim, '%Y-%m-%d')
+            filtros.append(Transacao.data <= dt_fim)
+        except ValueError:
+            return jsonify({"error": "Formato de data_fim inválido, use YYYY-MM-DD"}), 400
+
+    if valor_min:
+        try:
+            filtros.append(Transacao.valor >= float(valor_min))
+        except ValueError:
+            return jsonify({"error": "valor_min deve ser um número"}), 400
+
+    if valor_max:
+        try:
+            filtros.append(Transacao.valor <= float(valor_max))
+        except ValueError:
+            return jsonify({"error": "valor_max deve ser um número"}), 400
+
+    if filtros:
+        query = query.filter(and_(*filtros))
+
+    transacoes = query.all()
+
     return jsonify([{
         "id": t.id,
-        "data": t.data,
+        "data": t.data.strftime('%Y-%m-%d'),
         "descricao": t.descricao,
         "valor": t.valor,
         "categoria": t.categoria
     } for t in transacoes])
+
+# ----------------------
+# Listar categorias do usuário
+# ----------------------
+@transacoes_bp.route('/categorias', methods=['GET'])
+@token_required
+def listar_categorias(current_user):
+    categorias = (
+        session.query(func.lower(Transacao.categoria)) 
+        .filter_by(user_id=current_user.id)
+        .distinct()
+        .all()
+    )
+
+    categorias_lista = [c[0] for c in categorias if c[0]]  # remove None ou vazios
+
+    return jsonify({"categorias": categorias_lista})
+
 
 # ----------------------
 # Criar transação manualmente
