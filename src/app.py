@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
-from routes.transacoes import transacoes_bp
-from routes.auth import auth_bp
-from routes.charts_data import charts_bp
+from routes.transacoes_routes import transacoes_bp
+from routes.auth_routes import auth_bp
+from routes.graficos_routes import charts_bp
 
 
 app = Flask(__name__)

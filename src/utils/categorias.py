@@ -22,10 +22,7 @@ CATEGORIAS_KEYWORDS = {
     "seguro": ["seguro", "porto seguro", "bradesco seguro", "mapfre", "allianz"]
 
 }
-# ----------------------
-# Retorna a categoria com base nas palavras-chave.
-# Caso nenhuma seja encontrada, retorna 'outros'.
-# ----------------------
+
 def categorizar(descricao: str) -> str:
     if not descricao:
         return "outros"
@@ -33,7 +30,10 @@ def categorizar(descricao: str) -> str:
     desc_lower = descricao.lower()
     for categoria, palavras in CATEGORIAS_KEYWORDS.items():
         for palavra in palavras:
-            if re.search(rf"\b{re.escape(palavra.lower())}\b", desc_lower):
+            palavra_encontrada = re.search(
+                rf"\b{re.escape(palavra.lower())}\b", desc_lower
+            )
+            if palavra_encontrada:
                 return categoria
-    
+        
     return "outros"

@@ -3,8 +3,7 @@ venv/
 __pycache__/
 *.pyc
 
-# Banco de dados
-*.db
+
 
 # IDEs
 .vscode/
