@@ -15,7 +15,7 @@ Backend simples em **Flask** para análise de faturas em CSV e PDF, integrado ao
 
 ## Deploy
 
-🔗 Frontend: [Invoice Analyzer Dashboard](https://invoice-analyzer-frontend.vercel.app/dashboard)
+🔗 Frontend: [Invoice Analyzer](https://invoice-analyzer-frontend.vercel.app/)
 
 (Backend rodando local ou via deploy próprio, link não fornecido)
 
