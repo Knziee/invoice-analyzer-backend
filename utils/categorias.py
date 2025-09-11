@@ -14,6 +14,13 @@ CATEGORIAS_KEYWORDS = {
     "bebidas": ["bar", "pub", "bebidas", "adega", "heineken", "budweiser", "vinho", "whisky"],
     "saude": ["academia", "gympass", "consulta", "clinica", "hospital"],
     "educacao": ["curso", "udemy", "alura", "coursera", "faculdade", "universidade"],
+    "viagem": ["passagem", "hotel", "airbnb", "booking", "viagem", "avianca", "latam", "gol", "azul"],
+    "roupas": ["renner", "rihappy", "zara", "marisa", "lojas americanas", "roupa", "roupas"],
+    "pet": ["petshop", "veterinario", "ração", "bicho", "gato", "cachorro", "pet"],
+    "telefonia": ["claro", "vivo", "tim", "oi", "telefonia", "chip"],
+    "internet": ["net", "vivo fibra", "oi fibra", "internet", "provedor"],
+    "seguro": ["seguro", "porto seguro", "bradesco seguro", "mapfre", "allianz"]
+
 }
 # ----------------------
 # Retorna a categoria com base nas palavras-chave.
